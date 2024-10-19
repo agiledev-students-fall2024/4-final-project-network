@@ -25,7 +25,6 @@ const App = () => {
         <Route path="/blogpostloggedin" element={<Blogpostloggedin />} />
         <Route path="/blogpostnotloggedin" element={<Blogpostnotloggedin />} />
         <Route path="/updateblogpost" element={<Updateblogpost />} />
-        <Route path='/' element={<Home />} />
         <Route
           path='/login'
           element={<ProtectedRoute isAuthenticated={!isAuthenticated} element={<Login />} navigateTo={'/'} />}
@@ -34,16 +33,21 @@ const App = () => {
           path='/register'
           element={<ProtectedRoute isAuthenticated={!isAuthenticated} element={<Register />} navigateTo={'/'} />}
         />
-        <Route path='/profile/:username' element={<Profile />} />
+        <Route 
+            path='/profile/:username'  
+            element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<Profile />} navigateTo={'/login'} />}
+        />
         <Route
           path='/edit-profile'
           element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<EditProfile />} navigateTo='/login'/>}
         />
-        <Route path='*' element={<Error404 />} />
         <Route
           path='/friendslist'
           element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<FriendsList />} navigateTo='/login'/>}
         />
+
+        
+        <Route path='*' element={<Error404 />} />
       </Routes>
     </Router>
   )

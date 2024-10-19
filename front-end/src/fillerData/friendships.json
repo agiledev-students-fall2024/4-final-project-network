@@ -6,17 +6,15 @@
         "created_at": "2024-10-01T12:00:00Z"
     },
     {
-        "id": 4,
+        "id": 2,
         "user_id_1": 1,
         "user_id_2": 5,
-        "status": "friends",
         "created_at": "2024-10-01T12:00:00Z"
     },
     {
-        "id": 6,
+        "id": 3,
         "user_id_1": 3,
         "user_id_2": 5,
-        "status": "friends",
         "created_at": "2024-10-01T12:00:00Z"
     }
 ]

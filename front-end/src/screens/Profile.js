@@ -6,17 +6,32 @@ import { Container } from 'react-bootstrap'
 import userData from '../fillerData/users.json'
 import loggedInData from '../fillerData/loggedIn.json'
 import postData from '../fillerData/posts.json'
+import blockedData from '../fillerData/blocked.json'
 
 const Profile = () => {
     const { username } = useParams()
     const user = userData.find(user => user.username === username)
     
-    if (!user) {
-        return <Navigate to='/' />
+    if (!user) ( <Navigate to='/' /> )
+
+    const getBlockedUsers = () => {
+        const blockedUsers = []
+
+        blockedData.forEach(item => {
+            if (item.blocked_id === loggedInData[0].id) {
+                blockedUsers.push(item.blocker_id)
+            } else if (item.blocker_id === loggedInData[0].id){
+                blockedUsers.push(item.blocked_id)
+            }
+        })
+
+        return blockedUsers
     }
 
+    if (getBlockedUsers().includes(user.id))( <Navigate to='/' /> )
+
+    const belongsToLoggedIn = loggedInData[0].id === user.id 
     const posts = postData.filter(post => post.author_id === user.id).sort((a, b) => new Date(b.date) - new Date(a.date))
-    const isLoggedIn = loggedInData[0].id === user.id
 
     const generateRandomList = (min, max, count) => (
         Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min)
@@ -49,11 +64,11 @@ const Profile = () => {
                             post.imageUrl ? 
                             <img 
                                 src={post.imageUrl} 
-                                alt='User-submitted image' 
+                                alt='User-submitted' 
                                 key={`profile-${user.username}-${post.id}`} />: 
                             <img 
                                 src={noImgSrc}
-                                alt='No image provided by user'
+                                alt='Not provided by user'
                                 key={`profile-${user.username}-${post.id}`} 
                                 className='no-img' />
                         )
@@ -70,11 +85,11 @@ const Profile = () => {
                                 { post.imageUrl ? 
                                     <img 
                                         src={post.imageUrl} 
-                                        alt='User-submitted image' 
+                                        alt='User-submitted' 
                                         style={{'--masonry-img-height': `${randomNumbers[index]}rem`}} />: 
                                     <img 
                                         src={noImgSrc}
-                                        alt='No image provided by user'
+                                        alt='Not provided by user'
                                         className='no-img' 
                                         style={{'--masonry-img-height': `${randomNumbers[index]}rem`}} />
                                 }
@@ -93,13 +108,12 @@ const Profile = () => {
                         <img 
                             key={`profile-${user.username}-${post.id}`}
                             src={post.imageUrl} 
-                            alt='User-submitted image' 
-                            className=''
+                            alt='User-submitted' 
                             style={{'--masonry-img-height': `${randomNumbers[index]}rem`}} />: 
                         <img 
                             key={`profile-${user.username}-${post.id}`}
                             src={noImgSrc}
-                            alt='No image provided by user' 
+                            alt='Not provided by user' 
                             className='no-img' 
                             style={{'--masonry-img-height': `${randomNumbers[index]}rem`}} />
 
@@ -114,8 +128,8 @@ const Profile = () => {
                         return (
                             <div key={`profile-${user.username}-${post.id}`}>
                                 { post.imageUrl ? 
-                                    <img src={post.imageUrl} alt='User-submitted image' />: 
-                                    <img src={noImgSrc} alt='No image provided by user' className='no-img' />
+                                    <img src={post.imageUrl} alt='User-submitted' />: 
+                                    <img src={noImgSrc} alt='Not provided by user' className='no-img' />
                                 }
                                 <h2>{post.title}</h2>
                                 <p className='mt-3 mb-0 text-end'>{dateObject.toLocaleDateString('en-US')}</p>
@@ -134,7 +148,7 @@ const Profile = () => {
                         <path fillRule='evenodd' d='M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5'/>
                     </svg>
                 </Link>
-                {isLoggedIn && <Link to='/' className='btn btn-secondary rounded-pill'>New Post</Link>}
+                {belongsToLoggedIn && <Link to='/' className='btn btn-secondary rounded-pill'>New Post</Link>}
             </header>
             <Container className='content' id='profile-blog-posts'>
                 <h1>{user.name}</h1>
@@ -152,8 +166,8 @@ const Profile = () => {
                 <p>{user.bio}</p>
 
                 <div className='profile-functions mb-4'>
-                    {isLoggedIn && <Link to='/edit-profile' className='btn btn-secondary rounded-pill'>Edit profile</Link>}
-                    {isLoggedIn && <Link to='/' className='btn btn-secondary rounded-pill'>Friends</Link>}
+                    {belongsToLoggedIn && <Link to='/edit-profile' className='btn btn-secondary rounded-pill'>Edit profile</Link>}
+                    {belongsToLoggedIn && <Link to='/friendslist' className='btn btn-secondary rounded-pill'>Friends</Link>}
                 </div>
             </Container>
             <div className='mx-3 mb-5'>
