@@ -77,4 +77,40 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), async (req,
   }
 });
 
+router.put('/edit/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const {id} = req.params;
+  const { title, content, photo } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid Post ID.' });
+  }
+
+  try {
+    // Fetch the post to update
+    const post = await Post.findById(id).populate('author').exec();
+    console.log(post)
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found.' });
+    }
+
+    // Ensure the logged-in user is the author of the post
+    if (!post.author.equals(req.user._id)) {
+      return res.status(403).json({ message: 'You are not authorized to edit this post.' });
+    }
+
+    // Update the post
+    post.title = title || post.title;
+    post.content = content || post.content;
+    post.photo = photo || post.photo;
+
+    const updatedPost = await post.save();
+
+    res.status(200).json({message: 'Post updated successfully', updatedPost});
+  } catch (error) {
+    console.error('Error updating post:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
 module.exports = router;
