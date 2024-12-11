@@ -2,6 +2,8 @@ import '../styles/Updateblogpost.css';
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
+
 
 // Assuming you have defined REACT_APP_API_URL in your .env file and it's loaded correctly
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -10,6 +12,7 @@ const UpdateBlogPost = () => {
   const { postId } = useParams(); // Extract the post ID from the URL
   const token = localStorage.getItem('token')
   const [post, setPost] = useState(null);
+  const navigate = useNavigate(); 
 
 
   useEffect(() => {
@@ -36,6 +39,7 @@ const UpdateBlogPost = () => {
     try {
       const response = await axios.put(`${apiUrl}/api/posts/edit/${postId}`, updatedData, { headers: { Authorization: `Bearer ${token}` }, });
       console.log('Post updated successfully:', response.data);
+      navigate(`/blogpostloggedin/${postId}`);
     } catch (error) {
       console.error('Error updating post:', error);
     }
@@ -70,11 +74,17 @@ const UpdateBlogPost = () => {
 
         <div className="form-group">
           <label htmlFor="postContent">Content:</label>
-          <textarea
+{/*           <textarea
             id="postContent"
             value={post.content}
             onChange={(e) => setPost({ ...post, content: e.target.value })}
-          />
+          /> */}
+          <textarea                                                             //CHANGE
+            id="postContent"
+            rows={10} // Adjust rows to an appropriate value
+            value={post.content}
+            onChange={(e) => setPost({ ...post, content: e.target.value })}
+          />
         </div>
 
 {/*         <div className="form-group">
