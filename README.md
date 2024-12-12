@@ -34,4 +34,4 @@ A detailed breakdown of our app map and wireframes, as well as a Figma prototype
 
 ### Link to live deployment
 
-We deployed our project using DigitalOcean. Link to live web app: https://stingray-app-7dy8g.ondigitalocean.app/login
+We deployed our project using DigitalOcean. [Live Web App](https://stingray-app-7dy8g.ondigitalocean.app/login)
