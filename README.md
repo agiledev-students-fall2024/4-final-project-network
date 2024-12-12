@@ -32,6 +32,6 @@ One of our teammates has always loved playing volleyball. The first idea was to 
 
 A detailed breakdown of our app map and wireframes, as well as a Figma prototype: [UX Design](./UX-DESIGN.md)
 
-### Link to live deployment
+### Live deployment
 
 We deployed our project using DigitalOcean. [Live Web App](https://stingray-app-7dy8g.ondigitalocean.app/login)
